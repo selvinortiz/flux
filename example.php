@@ -10,33 +10,17 @@ $flux
 	->then('://')
 	->maybe('www.')
 	->anythingBut('.')
-	->either('.in', '.co', '.com')
-	->inAnyCase()
+	->either('.co', '.com')
+	->ignoreCase()
 	->endOfLine();
 
 dd( $flux, false );
-// Pattern /^(http)(s)?(\:\/\/)(www\.)?([^\.]*)(.in|.co|.com)$/i
-echo $flux->match( $url ) ? 'matched' : 'unmatched'; // matched
-echo $flux->replace( 'https://$5$6', $url ); // https://selvinortiz.com
+msg( $flux );
+msg( $flux->match( $url ) ? 'matched' : 'unmatched' );
+msg( $flux->replace( 'https://$5$6', $url ) );
+msg( '<hr>' );
 
-$phone	= '(612) 424-0013';
-$flux	= new Flux();
-$flux
-	->startOfLine()
-	->find('(')
-	->digits(3)
-	->then(')')
-	->maybe(' ')
-	->digits(3)
-	->anyOf(' -')
-	->digits(4)
-	->endOfLine();
-
-dd( $flux, false );
-// Pattern /^(\()(\d{3})(\))( )?(\d{3})([ \-])(\d{4})$/
-echo $flux->match( $phone ) ? 'matched' : 'unmatched'; // matched
-echo $flux->replace( '$2.$5.$7', $phone ); // 612.424.0013
-
+//--------------------------------------------------------------------------------
 
 $date	= 'Monday, Jul 22, 2013';
 $flux	= new Flux();
@@ -52,16 +36,45 @@ $flux
 	->endOfLine();
 
 dd( $flux, false );
-// Pattern /^(\()(\d{3})(\))( )?(\d{3})([ \-])(\d{4})$/
-echo $flux->match( $date ) ? 'matched' : 'unmatched'; // matched
-echo $flux->replace( '$3/$5/$7', $date ); // 612.424.0013
+msg( $flux );
+msg( $flux->match( $date ) ? 'matched' : 'unmatched' );
+msg( $flux->replace( '$3/$5/$7', $date ) );
+msg( '<hr>' );
 
 //--------------------------------------------------------------------------------
 
-function dd($data, $die=true)
+$phone	= '(612) 424-0013';
+$flux	= new Flux();
+$flux
+	->startOfLine()
+	->find('(')
+	->digits(3)
+	->then(')')
+	->maybe(' ')
+	->digits(3)
+	->anyOf(' -')
+	->digits(4)
+	->endOfLine();
+
+dd( $flux, false );
+msg( $flux );
+msg( $flux->match( $phone ) ? 'matched' : 'unmatched' );
+msg( $flux->replace( '$2.$5.$7', $phone ) );
+msg( '<hr>' );
+
+//--------------------------------------------------------------------------------
+
+function dd( $data, $die=true )
 {
 	echo '<pre style="font-weight: bold;">';
 	print_r( $data );
 	if ( $die ) { exit; }
+	echo '</pre>';
+}
+
+function msg( $str )
+{
+	echo '<pre>';
+	echo '<b>', $str, '</b>';
 	echo '</pre>';
 }

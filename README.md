@@ -17,7 +17,7 @@ Fluent Regular Expressions _for_ PHP
 - Adds `ignoreCase()` and promotes it above `inAnyCase()`
 - Improves the documented API
 
-_Thought hard about changing the name to `FluentX' any thoughts?_
+_Thought hard about changing the name to `FluentX` any thoughts?_
 
 ----
 #### 0.2.0
@@ -56,11 +56,11 @@ $flux
 	->then('://')
 	->maybe('www.')
 	->anythingBut('.')
-	->either('.in', '.co', '.com')
-	->inAnyCase()
+	->either('.co', '.com')
+	->ignoreCase()
 	->endOfLine();
 
-// Pattern /^(http)(s)?(\:\/\/)(www\.)?([^\.]*)(.in|.co|.com)$/i
+// URL Pattern /^(http)(s)?(\:\/\/)(www\.)?([^\.]*)(.co|.com)$/i
 echo $flux->match( $url ); // true
 echo $flux->replace( 'https://$5$6', $url ); // https://selvinortiz.com
 
@@ -80,9 +80,9 @@ $flux
 	->digits(4)
 	->endOfLine();
 
-// Pattern /^(\()(\d{3})(\))( )?(\d{3})([ \-])(\d{4})$/
+// Date Pattern /^(\w+)(, )([a-zA-Z]{3})( )(\d{1,2})(, )(\d{4})$/
 echo $flux->match( $date ) ? 'matched' : 'unmatched'; // matched
-echo $flux->replace( '$3/$5/$7', $date ); // 612.424.0013
+echo $flux->replace( '$3/$5/$7', $date ); // Jul/22/2013
 
 /**
  * Build a US Phone Number pattern then test w/ match() and do a replace()
@@ -100,7 +100,7 @@ $flux
 	->digits(4)
 	->endOfLine();
 
-// Pattern /^(\()(\d{3})(\))( )?(\d{3})([ \-])(\d{4})$/
+// Phone Pattern /^(\()(\d{3})(\))( )?(\d{3})([ \-])(\d{4})$/
 echo $flux->match( $phone ) ? 'matched' : 'unmatched'; // matched
 echo $flux->replace( '$2.$5.$7', $phone ); // 612.424.0013
 ```
