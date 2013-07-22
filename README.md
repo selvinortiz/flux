@@ -17,28 +17,30 @@ Initial preview release
 ### Example
 ----
 
-	$flux		= new Flux();
-	$subject 	= 'http://selvinortiz.com';
+```php
+$flux		= new Flux();
+$subject 	= 'http://selvinortiz.com';
 
-	$flux
-		->startOfLine()
-		->find('http')
-		->maybe('s')
-		->then('://')
-		->maybe('www.')
-		->anythingBut('.')
-		->raw('.com|.co')
-		->inAnyCase()
-		->endOfLine();
+$flux
+	->startOfLine()
+	->find('http')
+	->maybe('s')
+	->then('://')
+	->maybe('www.')
+	->anythingBut('.')
+	->raw('.com|.co')
+	->inAnyCase()
+	->endOfLine();
 
-	// Echoing the instance will yield the compiled pattern (__toString)
-	echo $flux; // /^(http)(s)?(\:\/\/)(www\.)?([^\.]*)(.com|.co)$/i
+// Echoing the instance will yield the compiled pattern (__toString)
+echo $flux; // /^(http)(s)?(\:\/\/)(www\.)?([^\.]*)(.com|.co)$/i
 
-	// Match against the subject string
-	echo $flux->match( $subject ); // TRUE
+// Match against the subject string
+echo $flux->match( $subject ); // TRUE
 
-	// Replace the subject with matched segment $5 and $6
-	echo $flux->replace( '$5$6', $subject ); // selvinortiz.com
+// Replace the subject with matched segment $5 and $6
+echo $flux->replace( '$5$6', $subject ); // selvinortiz.com
+```
 
 ### FLUX API
 The **flux** API was designed to give you a *fluent chainable object to build patterns with*.
@@ -69,4 +71,4 @@ Alias to `any()`
 #### `replace( $replacement, $subject )`
 
 #### `(...)`
-The are plenty of other function to document but I'll get to the rest shortly
+There are plenty of other function to document but I'll get to the rest shortly
