@@ -114,15 +114,13 @@ Adds a beginning of line `^` modifier
 #### `endOfLine()`
 Adds an end of line `$` modifier
 
-#### `find( $val )`
-#### `then( $val )`
+#### `find( $val ) & then( $val )`
 Allow you to augment the pattern with a required `segment` and it escapes regular expression characters
 
 #### `maybe( $val )`
 Allows you to augment the pattern with an optional `segment`
 
-#### `any( $val )`
-#### `anyOf( $val )`
+#### `any( $val ) & anyOf( $val )`
 Allow you to create a set of characters to match
 
 #### `anything()`
@@ -146,8 +144,7 @@ Allows you to create a `range` character class like `a-z0-9` by calling `range('
 #### `orTry()`
 This is experimental and I don't have the implementation I feel comfortable with... yet!
 
-#### `ignoreCase()`
-#### `inAnyCase()`
+#### `ignoreCase() & inAnyCase()`
 Adds the `i` modifier to the pattern which will allow you to match in a case insensitive manner
 
 #### `dotAll()`
