@@ -17,7 +17,7 @@ Fluent Regular Expressions _for_ PHP
 - Adds `ignoreCase()` and promotes it above `inAnyCase()`
 - Improves the documented API
 
-*_Thought hard about changing the name to `FluentX' any thoughts?_
+_Thought hard about changing the name to `FluentX' any thoughts?_
 
 ----
 #### 0.2.0
@@ -36,7 +36,7 @@ Initial preview release
 - Add support for quantifiers
 - Add language methods for more advanced use cases
 - Add support for array/array replacements
-- Add reference to repos that have port `FLUX`
+- Add reference to repos that have ported `FLUX`
 - Add license notes
 - Add contributing notes
 - Add credits
@@ -47,7 +47,6 @@ Initial preview release
 /**
  * Build a URL pattern then test w/ match() and do a replace()
  */
-
 $url	= 'http://www.selvinortiz.com';
 $flux	= new Flux();
 $flux
@@ -68,7 +67,6 @@ echo $flux->replace( 'https://$5$6', $url ); // https://selvinortiz.com
 /**
  * Build a US Date pattern then test w/ match() and do a replace()
  */
-
 $date	= 'Monday, Jul 22, 2013';
 $flux	= new Flux();
 $flux
@@ -89,7 +87,6 @@ echo $flux->replace( '$3/$5/$7', $date ); // 612.424.0013
 /**
  * Build a US Phone Number pattern then test w/ match() and do a replace()
  */
-
 $phone	= '(612) 424-0013';
 $flux	= new Flux();
 $flux
@@ -109,7 +106,7 @@ echo $flux->replace( '$2.$5.$7', $phone ); // 612.424.0013
 ```
 
 ### FLUX API
-The **flux** API was designed to give you a *fluent chainable object to build patterns with*.
+The **flux** API was designed to give you a _fluent chainable object_ to build patterns with.
 
 #### `startOfLine()`
 Adds a beginning of line `^` modifier
@@ -119,35 +116,35 @@ Adds an end of line `$` modifier
 
 #### `find( $val )`
 #### `then( $val )`
-Allow you to augment the pattern with a required `segment` and it escapes regular expression chars
+Allow you to augment the pattern with a required `segment` and it escapes regular expression characters
 
 #### `maybe( $val )`
 Allows you to augment the pattern with an optional `segment`
 
 #### `any( $val )`
 #### `anyOf( $val )`
-Creates a character class behind the scenes so that you can optionally match different chars
+Allow you to create a set of characters to match
 
 #### `anything()`
 Adds a *wild card* `(.*)` `segment` to the pattern but it does not make `dotAll()` explicit
 
 #### `anythingBut( $val )`
-Will match anything but the chars in `$val` which is opposite of `any()` and `anyOf`
+Will match anything but the characters in `$val` which is opposite of `any()` and `anyOf`
 
 #### `word()`
 Adds `(\w+)` to the pattern which will match a single word
 
 #### `letters( $min=null, $max=null )`
-Only matches chars in the alphabet and uses `$min` and `$max` to create a quantifier
+Only matches characters in the alphabet and uses `$min` and `$max` to create a quantifier
 
-#### `digits( $mix=null, $max=null )
+#### `digits( $mix=null, $max=null )`
 Only matches digits and uses `$min` and `$max` to create a quantifier like `word()`
 
 #### `range( $from, $to [, $from, $to ...])`
 Allows you to create a `range` character class like `a-z0-9` by calling `range('a', 'z', 0, 9)`
 
 #### `orTry()`
-This is experimental and I don't have the implementation I feel comfortable with...
+This is experimental and I don't have the implementation I feel comfortable with... yet!
 
 #### `ignoreCase()`
 #### `inAnyCase()`
@@ -168,4 +165,9 @@ Simply takes your `$subject` in, compares it against the pattern, and returns wh
 #### `replace( $replacement, $subject )`
 You can replace matched `segments` by using the `$x` format where `x` is the `(int)` position of the matched `segment`
 
-### (...)
+----
+
+### @Feedback
+This is something that started as a weekend experiment but I would love to take it further so if you have any suggestions, please fire away!
+
+_The best way to get in touch with me is via twitter [@selvinortiz](http://twitter.com/selvinortiz) we'll take if from there_ :)
