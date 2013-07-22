@@ -105,7 +105,8 @@ class Flux
 
 	public function endOfLine() { return $this->addSuffix( '$' ); }
 
-	public function inAnyCase() { return $this->addModifier('i'); }
+	public function ignoreCase() { return $this->addModifier('i'); }
+	public function inAnyCase() { return $this->ignoreCase(); }
 
 	public function searchOneLine()	{ return $this->removeModifier('m'); }
 
@@ -148,9 +149,39 @@ class Flux
 		return $this->add( sprintf( '([^%s]*)', $this->sanitize( $val ) ) );
 	}
 
-	public function word() { return $this->add( '\\w+' ); }
+	public function word() { return $this->add( '(\\w+)' ); }
 
-	public function number() { return $this->add( '\\d+' ); }
+	public function letters( $min=null, $max=null )
+	{
+		if ( $min && $max )
+		{
+			return $this->add( sprintf( '([a-zA-Z]{%d,%d})', $min, $max ) );
+		}
+		elseif ( $min && is_null($max) )
+		{
+			return $this->add( sprintf( '([a-zA-Z]{%d})', $min ) );
+		}
+		else
+		{
+			return $this->add( '([a-zA-Z]+)' );
+		}
+	}
+
+	public function digits( $min=null, $max=null )
+	{
+		if ( $min && $max )
+		{
+			return $this->add( sprintf( '(\\d{%d,%d})', $min, $max ) );
+		}
+		elseif ( $min && is_null($max) )
+		{
+			return $this->add( sprintf( '(\\d{%d})', $min ) );
+		}
+		else
+		{
+			return $this->add( '(\\d+)' );
+		}
+	}
 
 	public function orTry( $val )
 	{
