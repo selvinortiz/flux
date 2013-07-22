@@ -10,7 +10,7 @@ Fluent Regular Expressions _for_ PHP
 
 ----
 #### 0.2.0
-- Adds the `either( $option1, $option2 [, $option3 ...] )`
+- Adds the `either( $option1, $option2 [, $option3 ...] )` method to handle OR cases
 - Updates the *fluent* example in this readme file
 - Adds the license
 
