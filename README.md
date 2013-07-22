@@ -9,6 +9,12 @@ Fluent Regular Expressions _for_ PHP
 ### Changelog
 
 ----
+#### 0.2.0
+- Adds the `either( $option1, $option2 [, $option3 ...] )`
+- Updates the *fluent* example in this readme file
+- Adds the license
+
+----
 #### 0.1.0
 Initial preview release
 
@@ -28,12 +34,12 @@ $flux
 	->then('://')
 	->maybe('www.')
 	->anythingBut('.')
-	->raw('.com|.co')
+	->either('.in', '.co', '.com')
 	->inAnyCase()
 	->endOfLine();
 
 // Echoing the instance will yield the compiled pattern (__toString)
-echo $flux; // /^(http)(s)?(\:\/\/)(www\.)?([^\.]*)(.com|.co)$/i
+echo $flux; // /^(http)(s)?(\:\/\/)(www\.)?([^\.]*)(.in|.co|.com)$/i
 
 // Match against the subject string
 echo $flux->match( $subject ); // TRUE
@@ -71,4 +77,4 @@ Alias to `any()`
 #### `replace( $replacement, $subject )`
 
 #### `(...)`
-There are plenty of other function to document but I'll get to the rest shortly
+There are plenty of other methods to document but I'll get to the rest shortly.

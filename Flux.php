@@ -129,6 +129,11 @@ class Flux
 		return $this->add( sprintf( '(%s)?', $this->sanitize( $val ) ) );
 	}
 
+	public function either( $val )
+	{
+		return $this->raw( implode('|', @func_get_args() ) );
+	}
+
 	public function any( $val )
 	{
 		return $this->add( sprintf( '([%s])', $this->sanitize($val) ) );
