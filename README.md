@@ -5,8 +5,8 @@
 Fluent Regular Expressions _in_ PHP
 
 ### Requirements
-*PHP 5.3
-*Composer
+- PHP 5.3
+- Composer
 
 ### Install
 `Flux` is available as a [package](https://packagist.org/packages/selvinortiz/flux) via [composer](http://getcomposer.org)
@@ -90,69 +90,42 @@ Initial preview release
 - Add contributing notes
 - Add credits
 
-### @Examples
+### @Example
+This simple example illustrates the way you would use `flux` and it's fluent interface to build complex patterns.
 
 ```php
-/**
- * Build a URL pattern then test w/ match() and do a replace()
- */
-$url	= 'http://www.selvinortiz.com';
-$flux	= new Sortiz\Tools\Flux();
-$flux
-	->startOfLine()
-	->find('http')
-	->maybe('s')
-	->then('://')
-	->maybe('www.')
-	->anythingBut('.')
-	->either('.co', '.com')
-	->ignoreCase()
-	->endOfLine();
+require_once realpath(__DIR__.'/../vendor/autoload.php');
 
-// URL Pattern /^(http)(s)?(\:\/\/)(www\.)?([^\.]*)(.co|.com)$/i
-echo $flux->match( $url ); // true
-echo $flux->replace( 'https://$5$6', $url ); // https://selvinortiz.com
+use SelvinOrtiz\Utils\Flux\Flux;
+use SelvinOrtiz\Utils\Flux\Helper;
 
-/**
- * Build a US Date pattern then test w/ match() and do a replace()
- */
-$date	= 'Monday, Jul 22, 2013';
-$flux	= new Sortiz\Tools\Flux();
-$flux
-	->startOfLine()
-	->word()
-	->then(', ')
-	->letters(3)
-	->then(' ')
-	->digits(1, 2)
-	->then(', ')
-	->digits(4)
-	->endOfLine();
+// The subject string (URL)
+$str	= 'http://www.selvinortiz.com';
 
-// Date Pattern /^(\w+)(, )([a-zA-Z]{3})( )(\d{1,2})(, )(\d{4})$/
-echo $flux->match( $date ) ? 'matched' : 'unmatched'; // matched
-echo $flux->replace( '$3/$5/$7', $date ); // Jul/22/2013
+// Bulding the pattern (Fluently)
+$flux	= Flux::getInstance()
+		->startOfLine()
+		->find('http')
+		->maybe('s')
+		->then('://')
+		->maybe('www.')
+		->anythingBut('.')
+		->either('.co', '.com')
+		->ignoreCase()
+		->endOfLine();
 
-/**
- * Build a US Phone Number pattern then test w/ match() and do a replace()
- */
-$phone	= '(612) 424-0013';
-$flux	= new Sortiz\Tools\Flux();
-$flux
-	->startOfLine()
-	->find('(')
-	->digits(3)
-	->then(')')
-	->maybe(' ')
-	->digits(3)
-	->anyOf(' -')
-	->digits(4)
-	->endOfLine();
+// Output the Flux instance
+Helper::dump( $flux );
 
-// Phone Pattern /^(\()(\d{3})(\))( )?(\d{3})([ \-])(\d{4})$/
-echo $flux->match( $phone ) ? 'matched' : 'unmatched'; // matched
-echo $flux->replace( '$2.$5.$7', $phone ); // 612.424.0013
+// Output the fluently built pattern (@see /src/SelvinOrtiz/Utils/Flux/Helper)
+Helper::msg( $flux );
+
+// Inspect the results
+Helper::msg( $str );
+Helper::msg( $flux->match( $str ) ? 'matched' : 'unmatched' );
+Helper::msg( $flux->replace( 'https://$5$6', $str ) );
 ```
+_For other examples, please see the `/etc` directory.
 
 ### FLUX API
 The **flux** API was designed to give you a _fluent chainable object_ to build patterns with.
