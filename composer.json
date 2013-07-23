@@ -3,10 +3,13 @@
     "description": "Fluent regular expressions in PHP.",
     "keywords": ["flux", "fluent", "php", "regex", "regular", "expressions"],
     "license": "MIT",
+    "homepage": "https://github.com/selvinortiz/flux",
     "authors": [
         {
             "name": "Selvin Ortiz",
-            "email": "selvin@selvin.co"
+            "email": "selvin@selvin.co",
+            "homepage": "http://twitter.com/selvinortiz",
+            "role": "Developer"
         }
     ],
     "require": {

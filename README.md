@@ -1,14 +1,37 @@
-## FLUX (Fluent Regex) 0.4.5
+## FLUX (Fluent Regex) 0.5.0 (Beta)
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
 ### Description
 Fluent Regular Expressions _in_ PHP
+
+### Requirements
+*PHP 5.3
+*Composer
+
+### Install
+`Flux` is available as a [package](https://packagist.org/packages/selvinortiz/flux) via [composer](http://getcomposer.org)
+
+* require: `"selvinortiz/flux": "dev-master"`
+* autoload: `require_once 'path/to/vendor/autoload.php'`
+* namespace: `use SelvinOrtiz\Utils\Flux\Flux;`
+* instantiate: `$flux = Flux::getInstance();`
+
+_You can additionally clone/download this repo and do whatever you want: )_
 
 ----
 
 ### @Changelog
 
 ----
+#### 0.5.0 (Beta)
+- Adds `getSegments()` to improve testability [Issue #5](https://github.com/selvinortiz/flux/issues/5)
+- Adds composer package [selvinortiz/flux](https://packagist.org/packages/selvinortiz/flux)
+- Adds `dev` branch
+- Adds contributing notes
+- Adds install notes
+
+----
+
 #### 0.4.5
 - Fixes internal namespace conflict
 - Changes namespace from `Sortiz\Tools` to `SelvinOrtiz\Utils\Flux`
@@ -52,7 +75,7 @@ _Thought hard about changing the name to `FluentX` any thoughts?_
 - Adds the license
 
 ----
-#### 0.1.0
+#### 0.1.0 (Alpha)
 Initial preview release
 
 ----
@@ -199,6 +222,13 @@ There is interest in porting `Flux` to other languages/platforms like `NodeJS`, 
 This is something that started as a weekend experiment but I would love to take it further so if you have any suggestions, please fire away!
 
 _The best way to get in touch with me is via twitter [@selvinortiz](http://twitter.com/selvinortiz) we'll take if from there_ :)
+
+### Contributing
+1. Check for open issues or open a new issue for a feature request or a bug
+2. Fork this repo to start making your changes to the `dev` branch or branch off
+3. Write a test which shows that the bug was fixed or that the feature works as expected
+4. Send a pull request and bug me until I merge it or tell you _no cigar; )_
+
 
 ### MIT License
 *Flux* is released under the [MIT license](http://opensource.org/licenses/MIT) which pretty much means you can do with it as you please and I won't get mad because I'm that nice; )
