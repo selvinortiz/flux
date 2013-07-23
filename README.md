@@ -1,4 +1,4 @@
-## FLUX (Fluent Regular Expressions) 0.3.0
+## FLUX (Fluent Regex) 0.4.0
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
 ### Description
@@ -7,6 +7,15 @@ Fluent Regular Expressions _for_ PHP
 ----
 
 ### @Changelog
+
+----
+#### 0.4.0
+- Adds `Flux` to the `Sortiz\Tools` namespace
+- Implements `PSR-2` Compliance (Tabs over Spaces)
+- Updates version number on `Flux` and this readme file
+- Updates the class instantiation with fully qualified class name on `example.php`
+- Adds references to other repos that have ported `flux`
+- Addresses concerns outlined in [Issue #3](https://github.com/selvinortiz/flux/issues/3)
 
 ----
 #### 0.3.0
@@ -36,8 +45,8 @@ Initial preview release
 - Add support for quantifiers
 - Add language methods for more advanced use cases
 - Add support for array/array replacements
-- Add reference to repos that have ported `FLUX`
-- Add license notes
+- Add reference to repos that have ported `Flux` (*)
+- Add license notes (*)
 - Add contributing notes
 - Add credits
 
@@ -48,7 +57,7 @@ Initial preview release
  * Build a URL pattern then test w/ match() and do a replace()
  */
 $url	= 'http://www.selvinortiz.com';
-$flux	= new Flux();
+$flux	= new Sortiz\Tools\Flux();
 $flux
 	->startOfLine()
 	->find('http')
@@ -68,7 +77,7 @@ echo $flux->replace( 'https://$5$6', $url ); // https://selvinortiz.com
  * Build a US Date pattern then test w/ match() and do a replace()
  */
 $date	= 'Monday, Jul 22, 2013';
-$flux	= new Flux();
+$flux	= new Sortiz\Tools\Flux();
 $flux
 	->startOfLine()
 	->word()
@@ -88,7 +97,7 @@ echo $flux->replace( '$3/$5/$7', $date ); // Jul/22/2013
  * Build a US Phone Number pattern then test w/ match() and do a replace()
  */
 $phone	= '(612) 424-0013';
-$flux	= new Flux();
+$flux	= new Sortiz\Tools\Flux();
 $flux
 	->startOfLine()
 	->find('(')
@@ -164,7 +173,15 @@ You can replace matched `segments` by using the `$x` format where `x` is the `(i
 
 ----
 
-### @Feedback
+### Flux Elsewhere
+There is interest in porting `Flux` to other languages/platforms like `NodeJS`, `Groovy` and `Java` they'll be listed here once available.
+
+* [NodeJS](https://npmjs.org/package/node-flux) _by_ [James Brooks](http://james.brooks.so)
+
+### Feedback
 This is something that started as a weekend experiment but I would love to take it further so if you have any suggestions, please fire away!
 
 _The best way to get in touch with me is via twitter [@selvinortiz](http://twitter.com/selvinortiz) we'll take if from there_ :)
+
+### MIT License
+*Flux* is released under the [MIT license](http://opensource.org/licenses/MIT) which pretty much means you can do with it as you please and I won't get mad because I'm that nice; )

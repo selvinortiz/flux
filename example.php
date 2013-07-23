@@ -2,7 +2,7 @@
 require __DIR__.'/Flux.php';
 
 $url	= 'http://www.selvinortiz.com';
-$flux	= new Flux();
+$flux	= new Sortiz\Tools\Flux();
 $flux
 	->startOfLine()
 	->find('http')
@@ -23,7 +23,7 @@ msg( '<hr>' );
 //--------------------------------------------------------------------------------
 
 $date	= 'Monday, Jul 22, 2013';
-$flux	= new Flux();
+$flux	= new Sortiz\Tools\Flux();
 $flux
 	->startOfLine()
 	->word()
@@ -44,7 +44,7 @@ msg( '<hr>' );
 //--------------------------------------------------------------------------------
 
 $phone	= '(612) 424-0013';
-$flux	= new Flux();
+$flux	= new Sortiz\Tools\Flux();
 $flux
 	->startOfLine()
 	->find('(')
