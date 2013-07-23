@@ -125,7 +125,7 @@ Helper::msg( $str );
 Helper::msg( $flux->match( $str ) ? 'matched' : 'unmatched' );
 Helper::msg( $flux->replace( 'https://$5$6', $str ) );
 ```
-_For other examples, please see the `/etc` directory.
+_For other examples, please see the `/etc` directory._
 
 ### FLUX API
 The **flux** API was designed to give you a _fluent chainable object_ to build patterns with.
