@@ -1,12 +1,29 @@
-## FLUX (Fluent Regex) 0.4.0
+## FLUX (Fluent Regex) 0.4.5
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
 ### Description
-Fluent Regular Expressions _for_ PHP
+Fluent Regular Expressions _in_ PHP
 
 ----
 
 ### @Changelog
+
+----
+#### 0.4.5
+- Fixes internal namespace conflict
+- Changes namespace from `Sortiz\Tools` to `SelvinOrtiz\Utils\Flux`
+- Adds composer support [Issue #3](https://github.com/selvinortiz/flux/issues/3)
+- Adds the `addSeed()` and `removeSeed()` methods [Issue #4](https://github.com/selvinortiz/flux/issues/4)
+- Adds the `getInstance()` static method
+- Adds `FluxUrlExample.php`, `FluxDateExample.php`, and `FluxPhoneExample.php`
+- Adds `getSeed()` to get the seed without forcing `__toString` on the object
+- Adds `getSegment()` to extract a segment (capturing group) from the pattern
+- Implements unit tests (60% coverage) [Issue #3](https://github.com/selvinortiz/flux/issues/3)
+- Implements Full `PSR-2` Compliance (Tabs over Spaces)
+- Enables the `seed` on `match()` and `replace()` [Issue #4](https://github.com/selvinortiz/flux/issues/4)
+- Removes `example.php` and defines them elsewhere
+- Moves examples into `/etc` and defines one example per file
+- Other small fixes and additions
 
 ----
 #### 0.4.0

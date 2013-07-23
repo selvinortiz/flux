@@ -1,0 +1,20 @@
+{
+    "name": "selvinortiz/flux",
+    "description": "Fluent regular expressions in PHP.",
+    "keywords": ["flux", "fluent", "php", "regex", "regular", "expressions"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Selvin Ortiz",
+            "email": "selvin@selvin.co"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+   "autoload": {
+        "psr-0": {
+            "SelvinOrtiz\\Utils\\Flux": "src"
+        }
+    }
+}

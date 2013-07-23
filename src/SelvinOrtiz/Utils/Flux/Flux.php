@@ -1,23 +1,23 @@
 <?php
-namespace Sortiz\Tools;
+namespace SelvinOrtiz\Utils\Flux;
 
 /**
- * @=Sortiz\Tools\Flux
+ * @=SelvinOrtiz\Utils\Flux
  *
- * Fluent Regular Expressions for PHP
+ * Fluent Regular Expressions in PHP
  *
  * @author		Selvin Ortiz - http://twitter.com/selvinortiz
  * @package		Tools
- * @version		0.4.0
+ * @version		0.4.5
  * @category	Regular Expressions (PHP)
  * @copyright	2013 Selvin Ortiz
  *
  * @todo
- * - add source code comments
- * - add language methods for more advanced usage
- * - add support for array/array replacements
- * - add support for quantifiers
- * - add composer support
+ * - Add source code comments
+ * - Add language methods for more advanced usage
+ * - Add support for array/array replacements
+ * - Add support for quantifiers
+ * - Add composer support
  */
 
 class Flux
@@ -30,11 +30,16 @@ class Flux
 
 	//--------------------------------------------------------------------------------
 
+	public static function getInstance()
+	{
+		return new self;
+	}
+
 	public function __toString() { return $this->compile();	}
 
 	protected function compile()
 	{
-		if ($this->seed) { return $this->seed; }
+		if ( $this->seed ) { return $this->seed; }
 
 		$pattern	= implode( '', $this->pattern );
 		$prefixes	= implode( '', $this->prefixes );
@@ -44,6 +49,33 @@ class Flux
 		return sprintf( '/%s%s%s/%s', $prefixes, $pattern, $suffixes, $modifiers );
 	}
 
+	public function addSeed( $seed )
+	{
+		$this->seed = $seed;
+		return $this;
+	}
+
+	public function getSeed()
+	{
+		// Breaks the chain
+		return $this->seed;
+	}
+
+	public function removeSeed()
+	{
+		$this->seed = false;
+		return $this;
+	}
+
+	// Gets the segment in the pattern
+	public function getSegment( $position=0 )
+	{
+		if ( array_key_exists( $position, $this->pattern ) ) {
+			return $this->pattern[ $position ];
+		}
+
+		return false;
+	}
 	//--------------------------------------------------------------------------------
 	// @=HELPERS
 	//--------------------------------------------------------------------------------
@@ -51,7 +83,6 @@ class Flux
 	public function add( $val )
 	{
 		array_push( $this->pattern, $val );
-
 		return $this;
 	}
 
@@ -205,8 +236,10 @@ class Flux
 	 * @return [boolean] Whether the string provided matches the pattern created/provided
 	 */
 
-	public function match( $subject )
+	public function match( $subject, $seed='' )
 	{
+		if ( !empty($seed) ) { $this->addSeed( $seed ); }
+
 		return preg_match( $this->compile(), $subject );
 	}
 
@@ -217,8 +250,10 @@ class Flux
 	 * @return [string] The replaced string or a copy of the original
 	 */
 
-	public function replace( $replacement, $subject )
+	public function replace( $replacement, $subject, $seed='' )
 	{
+		if ( !empty($seed) ) { $this->addSeed( $seed ); }
+
 		return preg_replace( $this->compile(), $replacement, $subject );
 	}
 
