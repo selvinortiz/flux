@@ -8,14 +8,13 @@ namespace SelvinOrtiz\Utils\Flux;
  *
  * @author		Selvin Ortiz - http://twitter.com/selvinortiz
  * @package		Tools
- * @version		0.4.5
+ * @version		0.5.0
  * @category	Regular Expressions (PHP)
  * @copyright	2013 Selvin Ortiz
  *
  * @todo
  * - Add source code comments
  * - Add language methods for more advanced usage
- * - Add support for array/array replacements
  * - Add support for quantifiers
  * - Add composer support
  */
@@ -30,13 +29,18 @@ class Flux
 
 	//--------------------------------------------------------------------------------
 
-	public static function getInstance()
-	{
-		return new self;
-	}
+	public static function getInstance() { return new self;	}
 
 	public function __toString() { return $this->compile();	}
 
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * @compile()
+	 * Compiles the prefixes/pattern/suffixes/modifiers into a regular expression
+	 *
+	 * @return	[string]	The regular expression built by Flux or added with addSeed()
+	 */
 	protected function compile()
 	{
 		if ( $this->seed ) { return $this->seed; }
@@ -49,16 +53,54 @@ class Flux
 		return sprintf( '/%s%s%s/%s', $prefixes, $pattern, $suffixes, $modifiers );
 	}
 
+	public function getPattern() { return $this->compile(); }
+
+	public function clear()
+	{
+		$this->seed			= false;
+		$this->pattern		= array();
+		$this->prefixes		= array();
+		$this->suffixes 	= array();
+		$this->modifiers	= array();
+		return $this;
+	}
+
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * @add()
+	 * The core method to augment the pattern with a new segment
+	 *
+	 * @param	[string]	$val	The string to augment the pattern with
+	 * @param	[string]	$frmt	The format string to wrap $val around
+	 * @return	[object]	$this	Flux instance
+	 */
+	public function add( $val, $frmt='(%s)' )
+	{
+		array_push( $this->pattern, sprintf( $frmt, $this->sanitize($val) ) );
+		return $this;
+	}
+
+	/**
+	 * @raw()
+	 * The core method to augment the pattern with a new segment w/o escaping
+	 *
+	 * @param	[string]	$val	The string to augment the pattern with
+	 * @param	[string]	$frmt	The format string to wrap $val around
+	 * @return	[object]	$this	Flux instance
+	 */
+	public function raw( $val, $frmt='%s' )
+	{
+		array_push( $this->pattern, sprintf( $frmt, $val ) );
+		return $this;
+	}
+
+	//--------------------------------------------------------------------------------
+
 	public function addSeed( $seed )
 	{
 		$this->seed = $seed;
 		return $this;
-	}
-
-	public function getSeed()
-	{
-		// Breaks the chain
-		return $this->seed;
 	}
 
 	public function removeSeed()
@@ -67,34 +109,38 @@ class Flux
 		return $this;
 	}
 
-	// Gets the segment in the pattern
-	public function getSegment( $position=0 )
+	public function getSeed() { return $this->seed; }
+
+	//--------------------------------------------------------------------------------
+
+	public function getSegment( $position=1 )
 	{
+		$position = ($position > 0) ? --$position : 0;
+
 		if ( array_key_exists( $position, $this->pattern ) ) {
 			return $this->pattern[ $position ];
 		}
-
 		return false;
 	}
-	//--------------------------------------------------------------------------------
-	// @=HELPERS
-	//--------------------------------------------------------------------------------
 
-	public function add( $val )
+	public function removeSegment( $position=1 )
 	{
-		array_push( $this->pattern, $val );
+
+		if ( array_key_exists( $position, $this->pattern ) ) {
+			unset($this->pattern[ $position ]);
+		}
 		return $this;
 	}
 
-	public function raw( $val ) { return $this->add( sprintf( '(%s)', $val ) ); }
+	public function getSegments() { return $this->pattern; }
+
+	//--------------------------------------------------------------------------------
 
 	public function addModifier( $modifier )
 	{
-		// @TODO: Define a method to make this operation safer and more expressive
 		if ( ! in_array( $modifier, $this->modifiers ) ) {
 			array_push( $this->modifiers, trim($modifier) );
 		}
-
 		return $this;
 	}
 
@@ -103,26 +149,24 @@ class Flux
 		if ( in_array($modifier, $this->modifiers) ) {
 			unset( $this->modifiers[ $modifier] );
 		}
-
 		return $this;
 	}
+
+	//--------------------------------------------------------------------------------
 
 	public function addPrefix( $prefix )
 	{
 		if ( ! in_array( $prefix, $this->prefixes ) ) {
 			array_push( $this->prefixes, trim($prefix) );
 		}
-
 		return $this;
 	}
 
-	// @TODO: Run more tests on this method to find placement bugs if any
 	public function addSuffix( $suffix )
 	{
 		if ( ! in_array( $suffix, $this->suffixes ) ) {
-			$this->suffixes = array_merge( array( trim($suffix) ), $this->suffixes );
+			array_push( $this->suffixes, trim($suffix) );
 		}
-
 		return $this;
 	}
 
@@ -135,13 +179,21 @@ class Flux
 	public function endOfLine() { return $this->addSuffix( '$' ); }
 
 	public function ignoreCase() { return $this->addModifier('i'); }
+
+	// @TODO: Deprecate (0.6.0)
 	public function inAnyCase() { return $this->ignoreCase(); }
 
-	public function searchOneLine()	{ return $this->removeModifier('m'); }
+	public function oneLine() { return $this->removeModifier('m'); }
+
+	// @TODO: Deprecate (0.6.0)
+	public function searchOneLine()	{ return $this->oneLine(); }
 
 	public function multiline() { return $this->addModifier('m'); }
 
-	public function dotAll() { return $this->addModifier('s'); }
+	public function matchNewLine() { return $this->addModifier('s'); }
+
+	// @TODO: dotAll() vs matchNewLine() thoughts?
+	public function dotAll() { return $this->matchNewLine(); }
 
 	//--------------------------------------------------------------------------------
 	// @=LANGUAGE
@@ -149,62 +201,60 @@ class Flux
 
 	public function find( $val ) { return $this->then( $val ); }
 
-	public function then( $val )
+	public function then( $val ) { return $this->add( $val ); }
+
+	public function maybe( $val ) { return $this->add( $val, '(%s)?' ); }
+
+	public function either()
 	{
-		return $this->add( sprintf( '(%s)', $this->sanitize( $val) ) );
+		return $this->raw( implode('|', func_get_args() ), '(%s)' );
 	}
 
-	public function maybe( $val )
-	{
-		return $this->add( sprintf( '(%s)?', $this->sanitize( $val ) ) );
-	}
-
-	public function either( $val )
-	{
-		return $this->raw( implode('|', @func_get_args() ) );
-	}
-
-	public function any( $val )
-	{
-		return $this->add( sprintf( '([%s])', $this->sanitize($val) ) );
-	}
+	public function any( $val ) { return $this->add( $val, '([%s])' ); }
 
 	public function anyOf( $val ) { return $this->any( $val ); }
 
-	public function anything() { return $this->add( '(.*)' ); }
+	public function anything() { return $this->raw( '(.*)' ); }
 
-	public function anythingBut( $val )
-	{
-		return $this->add( sprintf( '([^%s]*)', $this->sanitize( $val ) ) );
-	}
+	public function anythingBut( $val ) { return $this->add( $val, '([^%s]*)' ); }
 
-	public function word() { return $this->add( '(\\w+)' ); }
+	public function br() { return $this->raw('(\\n|\\r\\n)'); }
+
+	public function tab() { return $this->raw( '(\\t)' ); }
+
+	public function word() { return $this->raw( '(\\w+)' ); }
+
+	public function lineBreak() { return $this->br(); }
 
 	public function letters( $min=null, $max=null )
 	{
 		if ($min && $max) {
-			return $this->add( sprintf( '([a-zA-Z]{%d,%d})', $min, $max ) );
+			return $this->raw( sprintf( '([a-zA-Z]{%d,%d})', $min, $max ) );
 		} elseif ( $min && is_null($max) ) {
-			return $this->add( sprintf( '([a-zA-Z]{%d})', $min ) );
+			return $this->raw( sprintf( '([a-zA-Z]{%d})', $min ) );
 		} else {
-			return $this->add( '([a-zA-Z]+)' );
+			return $this->raw( '([a-zA-Z]+)' );
 		}
 	}
 
 	public function digits( $min=null, $max=null )
 	{
 		if ($min && $max) {
-			return $this->add( sprintf( '(\\d{%d,%d})', $min, $max ) );
+			return $this->raw( sprintf( '(\\d{%d,%d})', $min, $max ) );
 		} elseif ( $min && is_null($max) ) {
-			return $this->add( sprintf( '(\\d{%d})', $min ) );
+			return $this->raw( sprintf( '(\\d{%d})', $min ) );
 		} else {
-			return $this->add( '(\\d+)' );
+			return $this->raw( '(\\d+)' );
 		}
 	}
 
-	public function orTry( $val )
+	public function orTry( $val='' )
 	{
-		return $this->addPrefix('(')->addSuffix(')')->add( sprintf( ')|(%s', $val ) );
+		if ( empty($val) ) {
+			return $this->addPrefix('(')->addSuffix(')')->raw( ')|(' );
+		}
+
+		return $this->addPrefix('(')->addSuffix(')')->raw( $val, ')|((%s)' );
 	}
 
 	// @TODO: Add some sanity check to the ranges
@@ -216,13 +266,12 @@ class Flux
 
 		foreach ($args as $segment) {
 			$row++;
-
 			if ($row % 2) {
 				array_push( $ranges, sprintf( '%s-%s', $args[ $row-1 ], $args[ $row ] ) );
 			}
 		}
 
-		return $this->add( sprintf( '([%s])', implode( '', $ranges ) ) );
+		return $this->raw( implode( '', $ranges ), '([%s])' );
 	}
 
 	//--------------------------------------------------------------------------------

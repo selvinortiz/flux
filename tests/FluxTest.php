@@ -9,15 +9,26 @@ class FluxTest extends PHPUnit_Framework_TestCase
 
 	public function tearDown() {}
 
-	public function testAddSeedToString()
+	public function inspect($data)
 	{
-		$flux = Flux::getInstance()->addSeed('/^(.*)$/');
-		$this->assertTrue( (string) $flux === '/^(.*)$/' );
+		fwrite( STDERR, print_r($data) );
+	}
+
+	public function testGetInstance()
+	{
+		$this->assertInstanceOf( 'SelvinOrtiz\\Utils\\Flux\\Flux', Flux::getInstance() );
+	}
+
+	public function testCompile()
+	{
+		$this->assertTrue( (string) Flux::getInstance() === '//' );
+		$this->assertTrue( Flux::getInstance()->getPattern() === '//' );
 	}
 
 	public function testAddSeed()
 	{
-		$flux = Flux::getInstance()->addSeed('/^(.*)$/');
+		$flux = Flux::getInstance()->addSeed( '/^(.*)$/' );
+		$this->assertTrue( (string) $flux === '/^(.*)$/' );
 		$this->assertTrue( $flux->getSeed() === '/^(.*)$/' );
 	}
 
@@ -37,6 +48,29 @@ class FluxTest extends PHPUnit_Framework_TestCase
 	{
 		$value = Flux::getInstance()->sanitize('/.word');
 		$this->assertTrue( $value === '\/\.word' );
+	}
+
+	public function testAddPrefix()
+	{
+		$this->assertTrue( (string) Flux::getInstance()->startOfLine() === '/^/' );
+	}
+
+	public function testAddSuffix()
+	{
+		$this->assertTrue( (string) Flux::getInstance()->endOfLine() === '/$/' );
+	}
+
+	public function testModifiers()
+	{
+		$this->assertTrue( (string) Flux::getInstance()->multiline() === '//m');
+		$this->assertTrue( (string) Flux::getInstance()->multiline()->ignoreCase() === '//mi');
+		$this->assertTrue( (string) Flux::getInstance()->multiline()->ignoreCase()->matchNewLine() === '//mis');
+	}
+
+	public function testGetSegment()
+	{
+		$this->assertCount( 2, Flux::getInstance()->find('find')->then('again')->getSegments() );
+		$this->assertCount( 2, Flux::getInstance()->find('find')->then('again')->removeSegment(5)->getSegments() );
 	}
 
 	public function testFind()
@@ -81,9 +115,45 @@ class FluxTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue( $flux->getSegment() === '(one|two|three)' );
 	}
 
+	public function testOrTry()
+	{
+		$data	= 'dev.';
+		$flux 	= Flux::getInstance()
+				->startOfLine()
+				->find('dev.')
+				->orTry()
+				->maybe('live.')
+				->endOfLine();
+
+		$this->assertTrue( (bool) $flux->match( $data ) );
+		$this->assertTrue( $flux->replace( '$1', $data ) === 'dev.' );
+	}
+
 	public function testRange()
 	{
 		$flux = Flux::getInstance()->range('a', 'z', 0, 9);
 		$this->assertTrue( $flux->getSegment() === '([a-z0-9])' );
+	}
+
+	//--------------------------------------------------------------------------------
+	// @=Scenarios
+	//--------------------------------------------------------------------------------
+
+	public function testPhoneMatchReplace()
+	{
+		$phone	= '6124240013';
+		$flux 	= Flux::getInstance()
+				->startOfLine()
+				->maybe('(')
+				->digits(3)
+				->maybe(')')
+				->maybe(' ')
+				->digits(3)
+				->maybe('-')
+				->digits(4)
+				->endOfLine();
+
+		$this->assertTrue( (bool) $flux->match( $phone ) );
+		$this->assertTrue( $flux->replace( '($2) $5-$7', $phone ) === '(612) 424-0013' );
 	}
 }

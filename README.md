@@ -1,4 +1,4 @@
-## FLUX (Fluent Regex) 0.5.0 (Beta)
+## FLUX (Fluent Regex) 0.5.1 (Stable)
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
 ### Description
@@ -20,9 +20,62 @@ _You can additionally clone/download this repo and do whatever you want: )_
 
 ----
 
+### @Example
+This simple example illustrates the way you would use `flux` and it's fluent interface to build complex patterns.
+
+```php
+require_once realpath(__DIR__.'/../vendor/autoload.php');
+
+use SelvinOrtiz\Utils\Flux\Flux;
+use SelvinOrtiz\Utils\Flux\Helper;
+
+// The subject string (URL)
+$str	= 'http://www.selvinortiz.com';
+
+// Bulding the pattern (Fluently)
+$flux	= Flux::getInstance()
+		->startOfLine()
+		->find('http')
+		->maybe('s')
+		->then('://')
+		->maybe('www.')
+		->anythingBut('.')
+		->either('.co', '.com')
+		->ignoreCase()
+		->endOfLine();
+
+// Output the Flux instance
+Helper::dump( $flux );
+
+// Output the fluently built pattern (@see /src/SelvinOrtiz/Utils/Flux/Helper)
+Helper::msg( $flux ); // /^(http)(s)?(\:\/\/)(www\.)?([^\.]*)(.co|.com)$/i
+
+// Inspect the results
+Helper::msg( $str );
+Helper::msg( $flux->match( $str ) ? 'matched' : 'unmatched' );
+Helper::msg( $flux->replace( 'https://$5$6', $str ) );
+```
+_For other examples, please see the `/etc` directory._
+
+----
+
 ### @Changelog
 
 ----
+#### 0.5.1
+- Adds `getSegments()` which was not included in `0.5.0` [Issue #5](https://github.com/selvinortiz/flux/issues/5)
+- Adds `removeSegment()` which can be used in unit tests as well
+- Adds `lineBreak()` and `br()` which matches a new line (DOS/Unix)
+- Adds `clear()` which allows you to clear out the pattern and start from scratch
+- Adds `getPattern()` which compiles the expression and returns it
+- Adds `deprecation candidates as @todos
+- Fixes mixed logic between `add()` and `raw()`
+- Fixes implementation on the `orTry()` method
+- Moves example in readme above `changelog`
+- Improves unit tests
+
+----
+
 #### 0.5.0 (Beta)
 - Adds `getSegments()` to improve testability [Issue #5](https://github.com/selvinortiz/flux/issues/5)
 - Adds composer package [selvinortiz/flux](https://packagist.org/packages/selvinortiz/flux)
@@ -89,43 +142,6 @@ Initial preview release
 - Add license notes (*)
 - Add contributing notes
 - Add credits
-
-### @Example
-This simple example illustrates the way you would use `flux` and it's fluent interface to build complex patterns.
-
-```php
-require_once realpath(__DIR__.'/../vendor/autoload.php');
-
-use SelvinOrtiz\Utils\Flux\Flux;
-use SelvinOrtiz\Utils\Flux\Helper;
-
-// The subject string (URL)
-$str	= 'http://www.selvinortiz.com';
-
-// Bulding the pattern (Fluently)
-$flux	= Flux::getInstance()
-		->startOfLine()
-		->find('http')
-		->maybe('s')
-		->then('://')
-		->maybe('www.')
-		->anythingBut('.')
-		->either('.co', '.com')
-		->ignoreCase()
-		->endOfLine();
-
-// Output the Flux instance
-Helper::dump( $flux );
-
-// Output the fluently built pattern (@see /src/SelvinOrtiz/Utils/Flux/Helper)
-Helper::msg( $flux );
-
-// Inspect the results
-Helper::msg( $str );
-Helper::msg( $flux->match( $str ) ? 'matched' : 'unmatched' );
-Helper::msg( $flux->replace( 'https://$5$6', $str ) );
-```
-_For other examples, please see the `/etc` directory._
 
 ### FLUX API
 The **flux** API was designed to give you a _fluent chainable object_ to build patterns with.
