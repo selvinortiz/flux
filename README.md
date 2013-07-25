@@ -141,11 +141,10 @@ Initial preview release
 - Add source code comments
 - Add support for quantifiers
 - Add language methods for more advanced use cases
-- Add support for array/array replacements
 - Add reference to repos that have ported `Flux` (*)
 - Add license notes (*)
-- Add contributing notes
-- Add credits
+- Add contributing notes (*)
+- Add credits (*)
 
 ### FLUX API
 The **flux** API was designed to give you a _fluent chainable object_ to build patterns with.
@@ -171,6 +170,9 @@ Adds a *wild card* `(.*)` `segment` to the pattern but it does not make `dotAll(
 #### `anythingBut( $val )`
 Will match anything but the characters in `$val` which is opposite of `any()` and `anyOf`
 
+#### `tab()`
+Adds a `(\t)` to the pattern which will match a tab
+
 #### `word()`
 Adds `(\w+)` to the pattern which will match a single word
 
@@ -183,13 +185,13 @@ Only matches digits and uses `$min` and `$max` to create a quantifier like `word
 #### `range( $from, $to [, $from, $to ...])`
 Allows you to create a `range` character class like `a-z0-9` by calling `range('a', 'z', 0, 9)`
 
-#### `orTry()`
-This is experimental and I don't have the implementation I feel comfortable with... yet!
+#### `orTry( $val='' )`
+Allows you to create OR cases `(this)|(else)` and retain the capturing order to use in `replace()`
 
 #### `ignoreCase() & inAnyCase()`
 Adds the `i` modifier to the pattern which will allow you to match in a case insensitive manner
 
-#### `dotAll()`
+#### `matchNewLine() & dotAll()`
 Adds the `s` modifier to the pattern which will allow you to match a `new line` when using `anything()`
 
 #### `multiline()`
@@ -203,6 +205,12 @@ Simply takes your `$subject` in, compares it against the pattern, and returns wh
 
 #### `replace( $replacement, $subject )`
 You can replace matched `segments` by using the `$x` format where `x` is the `(int)` position of the matched `segment`
+
+#### `getPattern()`
+Returns the compiled pattern which you can also get by using the `flux` instance in a context where `__toString()` will be called
+
+#### `clear()`
+Clears the created `pattern` along with the `modifiers`, `prefixes`, and `suffixes`
 
 ----
 
@@ -235,8 +243,8 @@ whom on *July 20, 2013* started a weekend project that generated a lot of intere
 
 *VerbalExpressions* has also been ported to `Ruby`, `Java`, `Groovy` as of this update (July 25, 2013).
 
-**For a little background as to why _flux_ was created and why you should use it, please refer to** [Issue #7](https://github.com/selvinortiz/flux/issues/7)
-**for a discussion on that matter.**
+*For a little background as to why _flux_ was created and why you should use it, please refer to* [Issue #7](https://github.com/selvinortiz/flux/issues/7)
+*for a discussion on that matter.*
 
 ### MIT License
 *Flux* is released under the [MIT license](http://opensource.org/licenses/MIT) which pretty much means you can do with it as you please and I won't get mad because I'm that nice; )
