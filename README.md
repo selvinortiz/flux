@@ -1,6 +1,6 @@
 ## FLUX (Fluent Regex) 0.5.1 (Stable)
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
-[![Build Status](https://travis-ci.org/selvinortiz/flux.png)](https://travis-ci.orgselvinortiz/flux)
+[![Build Status](https://travis-ci.org/selvinortiz/flux.png)](https://travis-ci.org/selvinortiz/flux)
 [![Total Downloads](https://poser.pugx.org/selvinortiz/flux/d/total.png)](https://packagist.org/packages/selvinortiz/flux)
 [![Latest Stable Version](https://poser.pugx.org/selvinortiz/flux/v/stable.png)](https://packagist.org/packages/selvinortiz/flux)
 
