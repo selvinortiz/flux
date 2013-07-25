@@ -1,6 +1,4 @@
 <?php
-require_once realpath(__DIR__.'/../vendor/autoload.php');
-
 use SelvinOrtiz\Utils\Flux\Flux;
 
 class FluxTest extends PHPUnit_Framework_TestCase
