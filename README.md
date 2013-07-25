@@ -156,19 +156,22 @@ Adds a beginning of line `^` modifier
 Adds an end of line `$` modifier
 
 #### `find( $val ) & then( $val )`
-Allow you to augment the pattern with a required `segment` and it escapes regular expression characters
+Allows you to augment the pattern with a required `segment` and it escapes regular expression characters
 
 #### `maybe( $val )`
 Allows you to augment the pattern with an optional `segment`
 
 #### `any( $val ) & anyOf( $val )`
-Allow you to create a set of characters to match
+Allows you to create a set of characters to match
 
 #### `anything()`
 Adds a *wild card* `(.*)` `segment` to the pattern but it does not make `dotAll()` explicit
 
 #### `anythingBut( $val )`
 Will match anything but the characters in `$val` which is opposite of `any()` and `anyOf`
+
+#### `br() & lineBreak()`
+Allows you to match a new line `(DOS/Unix)`
 
 #### `tab()`
 Adds a `(\t)` to the pattern which will match a tab
@@ -197,7 +200,7 @@ Adds the `s` modifier to the pattern which will allow you to match a `new line` 
 #### `multiline()`
 Adds the `m` modifier to the pattern which will allow you to search across multiple lines
 
-#### `searchOneLine()`
+#### `oneLine() & searchOneLine()`
 Removes the modifier added by `multiline()` if it was previously called
 
 #### `match( $subject )`
@@ -215,9 +218,7 @@ Clears the created `pattern` along with the `modifiers`, `prefixes`, and `suffix
 ----
 
 ### Flux Elsewhere
-There is interest in porting `Flux` to other languages/platforms like `NodeJS`, `Groovy` and `Java` they'll be listed here once available.
-
-* [NodeJS](https://npmjs.org/package/node-flux) _by_ [James Brooks](http://james.brooks.so)
+There is a straight port of *Flux* for [NodeJS](https://npmjs.org/package/node-flux) _by_ [James Brooks](http://james.brooks.so) whom has also collaborated on this project.
 
 ### Feedback
 This is something that started as a weekend experiment but I would love to take it further so if you have any suggestions, please fire away!
