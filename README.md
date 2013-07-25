@@ -2,7 +2,11 @@
 *by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
 ### Description
-Fluent Regular Expressions _in_ PHP
+Fluent Regular Expressions _in_ PHP inspired by and largely based on
+[VerbalExpressions:JS](https://github.com/jehna/VerbalExpressions) by
+[Jesse Luoto](https://plus.google.com/u/0/101155583332851062944/posts)
+
+*@see inspiration & credits below for more info.*
 
 ### Requirements
 - PHP 5.3
@@ -218,6 +222,21 @@ _The best way to get in touch with me is via twitter [@selvinortiz](http://twitt
 3. Write a test which shows that the bug was fixed or that the feature works as expected
 4. Send a pull request and bug me until I merge it or tell you _no cigar; )_
 
+
+### Inspiration & Credits
+This project is inspired and largely based on
+[VerbalExpressions:JS](https://github.com/jehna/VerbalExpressions) by
+[Jesse Luoto](https://plus.google.com/u/0/101155583332851062944/posts)
+whom on *July 20, 2013* started a weekend project that generated a lot of interest in the developer community and that project has proven to have a lot of potential.
+
+*Flux* is not a straight port of *VerbalExpressions* but if you're interested in a straight *VerbalExpressions* port for *PHP* you should checkout
+[VerbalExpressions:PHP](https://github.com/markwilson/VerbalExpressionsPhp) by
+[Mark Wilson](https://github.com/markwilson)
+
+*VerbalExpressions* has also been ported to `Ruby`, `Java`, `Groovy` as of this update (July 25, 2013).
+
+**For a little background as to why _flux_ was created and why you should use it, please refer to** [Issue #7](https://github.com/selvinortiz/flux/issues/7)
+**for a discussion on that matter.**
 
 ### MIT License
 *Flux* is released under the [MIT license](http://opensource.org/licenses/MIT) which pretty much means you can do with it as you please and I won't get mad because I'm that nice; )
