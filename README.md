@@ -1,4 +1,4 @@
-## FLUX (Fluent Regex) 0.5.1 (Stable)
+## FLUX (Fluent Regex) 0.5.2
 [![Build Status](https://travis-ci.org/selvinortiz/flux.png)](https://travis-ci.org/selvinortiz/flux)
 [![Total Downloads](https://poser.pugx.org/selvinortiz/flux/d/total.png)](https://packagist.org/packages/selvinortiz/flux)
 [![Latest Stable Version](https://poser.pugx.org/selvinortiz/flux/v/stable.png)](https://packagist.org/packages/selvinortiz/flux)
