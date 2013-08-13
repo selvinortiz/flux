@@ -75,6 +75,7 @@ _For other examples, please see the `/etc` directory._
 - Adds `getLastSegmentKey()`
 - Adds the (empty) `Factory` class for optimized, often used patterns
 - Fixes indentation and EOF on `phpunit.xml`
+- Fixes comment typos on `README` and example files [Pull Request #10](https://github.com/selvinortiz/flux/pull/10)
 
 ----
 #### 0.5.1
