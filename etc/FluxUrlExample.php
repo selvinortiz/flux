@@ -30,6 +30,9 @@ Helper::msg( $str );
 Helper::msg( $flux->match( $str ) ? 'matched' : 'unmatched' );
 Helper::msg( $flux->replace( 'https://$5$6', $str ) );
 
+Helper::msg( Flux::getInstance()->word()->length(1) );
+Helper::msg( Flux::getInstance()->then('hello')->length(5) );
+
 //--------------------------------------------------------------------------------
 // EOF
 //--------------------------------------------------------------------------------

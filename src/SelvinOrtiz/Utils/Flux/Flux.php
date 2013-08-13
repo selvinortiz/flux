@@ -8,7 +8,7 @@ namespace SelvinOrtiz\Utils\Flux;
  *
  * @author		Selvin Ortiz - http://twitter.com/selvinortiz
  * @package		Tools
- * @version		0.5.0
+ * @version		0.5.2
  * @category	Regular Expressions (PHP)
  * @copyright	2013 Selvin Ortiz
  *
@@ -95,6 +95,22 @@ class Flux
 		return $this;
 	}
 
+	public function length( $min=null, $max=null )
+	{
+		$lengthPattern	= '';
+		$lastSegmentKey = $this->getLastSegmentKey();
+
+		if ( $min && $max && $min > $max ) {
+			$lengthPattern = sprintf( '{%d,%d}', (int) $min, (int) $max );
+		} elseif ( $min && ! $max ) {
+			$lengthPattern = sprintf( '{%d}', (int) $min );
+		} else {
+			$lengthPattern = '{1}';
+		}
+
+		return $this->replaceQuantifierByKey( $lastSegmentKey, $lengthPattern );
+	}
+
 	//--------------------------------------------------------------------------------
 
 	public function addSeed( $seed )
@@ -125,7 +141,6 @@ class Flux
 
 	public function removeSegment( $position=1 )
 	{
-
 		if ( array_key_exists( $position, $this->pattern ) ) {
 			unset($this->pattern[ $position ]);
 		}
@@ -133,6 +148,57 @@ class Flux
 	}
 
 	public function getSegments() { return $this->pattern; }
+
+	public function getLastSegmentKey()
+	{
+		if ( count($this->pattern) ) {
+			$patternKeys = array_keys( $this->pattern );
+			return array_shift( $patternKeys );
+		}
+
+		return false;
+	}
+
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * @replaceQuantifierByKey()
+	 * Allows us to add quantifiers to the pattern created by the last method call
+	 *
+	 * @param	[int]		$key	The key of the last segment in the pattern array
+	 * @param	[string]	$repl	The quantifier to add to the previous pattern
+	 * @return	[object]	$this	The Flux instance
+	 */
+	protected function replaceQuantifierByKey( $key, $repl='' )
+	{
+		$subject = $this->pattern[ $key ];
+
+		if ( strripos( $subject, ')' ) !== false ) {
+			$subject = rtrim( $subject, ')' );
+			$subject = $this->removeQuantifier( $subject );
+			$this->pattern[ $key ] = sprintf( '%s%s)', $subject, $repl );
+		} else {
+			$subject = $this->removeQuantifier( $subject );
+			$this->pattern[ $key ] = sprintf( '%s%s', $subject, $repl );
+		}
+
+		return $this;
+	}
+
+	protected function removeQuantifier( $pattern )
+	{
+		if ( strripos( $pattern, '+' ) !== false && strripos( $pattern, '\+' ) === false ) {
+			return rtrim( $pattern, '+');
+		}
+		if ( strripos( $pattern, '*' ) !== false && strripos( $pattern, '\*' ) === false ) {
+			return rtrim( $pattern, '*');
+		}
+		if ( strripos( $pattern, '?' ) !== false && strripos( $pattern, '\?' ) === false ) {
+			return rtrim( $pattern, '?');
+		}
+
+		return $pattern;
+	}
 
 	//--------------------------------------------------------------------------------
 
@@ -315,6 +381,5 @@ class Flux
 	public function sanitize( $val )
 	{
 		return preg_quote( $val, '/' );
-		// return preg_replace_callback( '/[^\w]/', function ($m) { return "\\".$m[0]; }, $val );
 	}
 }

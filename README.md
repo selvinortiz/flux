@@ -1,9 +1,9 @@
 ## FLUX (Fluent Regex) 0.5.1 (Stable)
-*by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 [![Build Status](https://travis-ci.org/selvinortiz/flux.png)](https://travis-ci.org/selvinortiz/flux)
 [![Total Downloads](https://poser.pugx.org/selvinortiz/flux/d/total.png)](https://packagist.org/packages/selvinortiz/flux)
 [![Latest Stable Version](https://poser.pugx.org/selvinortiz/flux/v/stable.png)](https://packagist.org/packages/selvinortiz/flux)
 
+*by* [Selvin Ortiz](http://twitter.com/selvinortiz)
 
 ### Description
 Fluent Regular Expressions _in_ PHP inspired by and largely based on
@@ -68,6 +68,13 @@ _For other examples, please see the `/etc` directory._
 ----
 
 ### @Changelog
+
+----
+#### 0.5.2
+- Adds `lenght()` method which adds or replaces the modifier used in the previous call
+- Adds `getLastSegmentKey()`
+- Adds the (empty) `Factory` class for optimized, often used patterns
+- Fixes indentation and EOF on `phpunit.xml`
 
 ----
 #### 0.5.1

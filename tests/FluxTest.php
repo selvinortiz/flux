@@ -133,6 +133,12 @@ class FluxTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue( $flux->getSegment() === '([a-z0-9])' );
 	}
 
+	public function testLength()
+	{
+		$this->assertTrue( (string) Flux::getInstance()->word()->length(1) === '/(\w{1})/' );
+		$this->assertTrue( (string) Flux::getInstance()->then('hello')->length(5) === '/(hello{5})/' );
+	}
+
 	//--------------------------------------------------------------------------------
 	// @=Scenarios
 	//--------------------------------------------------------------------------------
