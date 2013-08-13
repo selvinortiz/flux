@@ -40,7 +40,7 @@ use SelvinOrtiz\Utils\Flux\Helper;
 // The subject string (URL)
 $str	= 'http://www.selvinortiz.com';
 
-// Bulding the pattern (Fluently)
+// Building the pattern (Fluently)
 $flux	= Flux::getInstance()
 		->startOfLine()
 		->find('http')

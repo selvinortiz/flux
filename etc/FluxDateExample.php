@@ -7,7 +7,7 @@ use SelvinOrtiz\Utils\Flux\Helper;
 // The subject string (Date)
 $str	= 'Monday, Jul 22, 2013';
 
-// Bulding the pattern (Fluently)
+// Building the pattern (Fluently)
 $flux	= Flux::getInstance()
 		->startOfLine()
 		->word()

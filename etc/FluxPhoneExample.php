@@ -7,7 +7,7 @@ use SelvinOrtiz\Utils\Flux\Helper;
 // The subject string (Phone)
 $str	= '(612) 424-0013';
 
-// Bulding the pattern (Fluently)
+// Building the pattern (Fluently)
 $flux	= Flux::getInstance()
 		->startOfLine()
 		->find('(')
