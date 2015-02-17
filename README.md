@@ -71,7 +71,7 @@ _For other examples, please see the `/etc` directory._
 
 ----
 #### 0.5.2
-- Adds `lenght()` method which adds or replaces the modifier used in the previous call
+- Adds `length()` method which adds or replaces the modifier used in the previous call
 - Adds `getLastSegmentKey()`
 - Adds the (empty) `Factory` class for optimized, often used patterns
 - Fixes indentation and EOF on `phpunit.xml`

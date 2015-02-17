@@ -39,7 +39,7 @@ class FluxTest extends PHPUnit_Framework_TestCase
 	public function testRemoveSeed()
 	{
 		$flux = Flux::getInstance()->addSeed('/^(.*)$/')->removeSeed();
-		$this->assertFalse( $flux->getSeed() );
+		$this->assertNull( $flux->getSeed() );
 	}
 
 	public function testSanitize()

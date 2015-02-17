@@ -2,237 +2,363 @@
 namespace SelvinOrtiz\Utils\Flux;
 
 /**
- * @=SelvinOrtiz\Utils\Flux
- *
  * Fluent Regular Expressions in PHP
  *
- * @author		Selvin Ortiz - http://twitter.com/selvinortiz
- * @package		Tools
- * @version		0.5.2
- * @category	Regular Expressions (PHP)
- * @copyright	2013 Selvin Ortiz
- *
- * @todo
- * - Add source code comments
- * - Add language methods for more advanced usage
- * - Add support for quantifiers
- * - Add composer support
+ * @author         Selvin Ortiz - http://selv.in
+ * @package        Flux
+ * @version        0.5.2
+ * @category       Regular Expressions (PHP)
+ * @copyright      2013-2015 Selvin Ortiz
  */
-
 class Flux
 {
-	protected $seed			= false;
-	protected $pattern		= array();
-	protected $prefixes		= array();
-	protected $suffixes 	= array();
-	protected $modifiers	= array();
-
-	//--------------------------------------------------------------------------------
-
-	public static function getInstance() { return new self;	}
-
-	public function __toString() { return $this->compile();	}
-
-	//--------------------------------------------------------------------------------
+	/**
+	 * The seed expression to use instead of a fluently defined one
+	 *
+	 * @note
+	 * This is useful for testing
+	 *
+	 * @var string
+	 */
+	protected $seed;
 
 	/**
-	 * @compile()
-	 * Compiles the prefixes/pattern/suffixes/modifiers into a regular expression
+	 * The regular expression components that make up the expression
+	 * @var array
+	 */
+	protected $pattern   = array();
+	protected $prefixes  = array();
+	protected $suffixes  = array();
+	protected $modifiers = array();
+
+	/**
+	 * @return Flux
+	 */
+	public static function getInstance()
+	{
+		return new self;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return $this->compile();
+	}
+
+	/**
+	 * @deprecated Deprecated for version 0.6.0
 	 *
-	 * @return	[string]	The regular expression built by Flux or added with addSeed()
+	 * @param string $seed
+	 *
+	 * @return $this
+	 */
+	public function addSeed($seed)
+	{
+		return $this->setSeed($seed);
+	}
+
+	/**
+	 * Sets the seed expression to use instead of a fluently defined one
+	 *
+	 * @param $seed
+	 *
+	 * @return $this
+	 */
+	public function setSeed($seed)
+	{
+		$this->seed = $seed;
+
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removeSeed()
+	{
+		$this->seed = null;
+
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSeed()
+	{
+		return $this->seed;
+	}
+
+	/**
+	 * Compiles prefixes/pattern/suffixes/modifiers into a regular expression
+	 *
+	 * @return string
 	 */
 	protected function compile()
 	{
-		if ( $this->seed ) { return $this->seed; }
+		if (strlen(trim($this->seed)))
+		{
+			return $this->seed;
+		}
 
-		$pattern	= implode( '', $this->pattern );
-		$prefixes	= implode( '', $this->prefixes );
-		$suffixes	= implode( '', $this->suffixes );
-		$modifiers	= implode( '', $this->modifiers );
+		$pattern   = implode('', $this->pattern);
+		$prefixes  = implode('', $this->prefixes);
+		$suffixes  = implode('', $this->suffixes);
+		$modifiers = implode('', $this->modifiers);
 
-		return sprintf( '/%s%s%s/%s', $prefixes, $pattern, $suffixes, $modifiers );
+		return sprintf('/%s%s%s/%s', $prefixes, $pattern, $suffixes, $modifiers);
 	}
 
-	public function getPattern() { return $this->compile(); }
+	/**
+	 * Alias of compile()
+	 *
+	 * @see compile()
+	 *
+	 * @return string
+	 */
+	public function getPattern()
+	{
+		return $this->compile();
+	}
 
+	/**
+	 * Clears all pattern components to create a fresh expression
+	 *
+	 * @return $this
+	 */
 	public function clear()
 	{
-		$this->seed			= false;
-		$this->pattern		= array();
-		$this->prefixes		= array();
-		$this->suffixes 	= array();
-		$this->modifiers	= array();
-		return $this;
-	}
+		$this->seed      = false;
+		$this->pattern   = array();
+		$this->prefixes  = array();
+		$this->suffixes  = array();
+		$this->modifiers = array();
 
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * @add()
-	 * The core method to augment the pattern with a new segment
-	 *
-	 * @param	[string]	$val	The string to augment the pattern with
-	 * @param	[string]	$frmt	The format string to wrap $val around
-	 * @return	[object]	$this	Flux instance
-	 */
-	public function add( $val, $frmt='(%s)' )
-	{
-		array_push( $this->pattern, sprintf( $frmt, $this->sanitize($val) ) );
 		return $this;
 	}
 
 	/**
-	 * @raw()
-	 * The core method to augment the pattern with a new segment w/o escaping
+	 * Adds a sanitized pattern component that augments the overall expression
 	 *
-	 * @param	[string]	$val	The string to augment the pattern with
-	 * @param	[string]	$frmt	The format string to wrap $val around
-	 * @return	[object]	$this	Flux instance
+	 * @param string $value
+	 * @param string $format
+	 *
+	 * @return $this
 	 */
-	public function raw( $val, $frmt='%s' )
+	public function add($value, $format = '(%s)')
 	{
-		array_push( $this->pattern, sprintf( $frmt, $val ) );
+		array_push($this->pattern, sprintf($format, $this->sanitize($value)));
+
 		return $this;
 	}
 
-	public function length( $min=null, $max=null )
+	/**
+	 * Adds a raw pattern component that augments the overall expression
+	 *
+	 * @param string $value
+	 * @param string $format
+	 *
+	 * @return $this
+	 */
+	public function raw($value, $format = '%s')
 	{
-		$lengthPattern	= '';
+		array_push($this->pattern, sprintf($format, $value));
+
+		return $this;
+	}
+
+	/**
+	 * Adds a pattern component quantifier/length boundary
+	 *
+	 * @param int|null $min
+	 * @param int|null $max
+	 *
+	 * @return Flux
+	 */
+	public function length($min = null, $max = null)
+	{
 		$lastSegmentKey = $this->getLastSegmentKey();
 
-		if ( $min && $max && $min > $max ) {
-			$lengthPattern = sprintf( '{%d,%d}', (int) $min, (int) $max );
-		} elseif ( $min && ! $max ) {
-			$lengthPattern = sprintf( '{%d}', (int) $min );
-		} else {
+		if ($min && $max && $min > $max)
+		{
+			$lengthPattern = sprintf('{%d,%d}', (int) $min, (int) $max);
+		}
+		elseif ($min && !$max)
+		{
+			$lengthPattern = sprintf('{%d}', (int) $min);
+		}
+		else
+		{
 			$lengthPattern = '{1}';
 		}
 
-		return $this->replaceQuantifierByKey( $lastSegmentKey, $lengthPattern );
+		return $this->replaceQuantifierByKey($lastSegmentKey, $lengthPattern);
 	}
 
-	//--------------------------------------------------------------------------------
-
-	public function addSeed( $seed )
-	{
-		$this->seed = $seed;
-		return $this;
-	}
-
-	public function removeSeed()
-	{
-		$this->seed = false;
-		return $this;
-	}
-
-	public function getSeed() { return $this->seed; }
-
-	//--------------------------------------------------------------------------------
-
-	public function getSegment( $position=1 )
+	/**
+	 * @param int $position
+	 *
+	 * @return bool|string
+	 */
+	public function getSegment($position = 1)
 	{
 		$position = ($position > 0) ? --$position : 0;
 
-		if ( array_key_exists( $position, $this->pattern ) ) {
-			return $this->pattern[ $position ];
-		}
-		return false;
-	}
-
-	public function removeSegment( $position=1 )
-	{
-		if ( array_key_exists( $position, $this->pattern ) ) {
-			unset($this->pattern[ $position ]);
-		}
-		return $this;
-	}
-
-	public function getSegments() { return $this->pattern; }
-
-	public function getLastSegmentKey()
-	{
-		if ( count($this->pattern) ) {
-			$patternKeys = array_keys( $this->pattern );
-			return array_shift( $patternKeys );
+		if (array_key_exists($position, $this->pattern))
+		{
+			return $this->pattern[$position];
 		}
 
 		return false;
 	}
-
-	//--------------------------------------------------------------------------------
 
 	/**
-	 * @replaceQuantifierByKey()
-	 * Allows us to add quantifiers to the pattern created by the last method call
+	 * @param int $position
 	 *
-	 * @param	[int]		$key	The key of the last segment in the pattern array
-	 * @param	[string]	$repl	The quantifier to add to the previous pattern
-	 * @return	[object]	$this	The Flux instance
+	 * @return $this
 	 */
-	protected function replaceQuantifierByKey( $key, $repl='' )
+	public function removeSegment($position = 1)
 	{
-		$subject = $this->pattern[ $key ];
-
-		if ( strripos( $subject, ')' ) !== false ) {
-			$subject = rtrim( $subject, ')' );
-			$subject = $this->removeQuantifier( $subject );
-			$this->pattern[ $key ] = sprintf( '%s%s)', $subject, $repl );
-		} else {
-			$subject = $this->removeQuantifier( $subject );
-			$this->pattern[ $key ] = sprintf( '%s%s', $subject, $repl );
+		if (array_key_exists($position, $this->pattern))
+		{
+			unset($this->pattern[$position]);
 		}
 
 		return $this;
 	}
 
-	protected function removeQuantifier( $pattern )
+	/**
+	 * @return array
+	 */
+	public function getSegments()
 	{
-		if ( strripos( $pattern, '+' ) !== false && strripos( $pattern, '\+' ) === false ) {
-			return rtrim( $pattern, '+');
+		return $this->pattern;
+	}
+
+	/**
+	 * @return bool|mixed
+	 */
+	public function getLastSegmentKey()
+	{
+		if (count($this->pattern))
+		{
+			$patternKeys = array_keys($this->pattern);
+
+			return array_shift($patternKeys);
 		}
-		if ( strripos( $pattern, '*' ) !== false && strripos( $pattern, '\*' ) === false ) {
-			return rtrim( $pattern, '*');
+
+		return false;
+	}
+
+	/**
+	 * Allows us to add quantifiers to the pattern created by the last method call
+	 *
+	 * @param string $key The key of the last segment in the pattern array
+	 * @param string $replacement The quantifier to add to the previous pattern
+	 *
+	 * @return $this
+	 */
+	protected function replaceQuantifierByKey($key, $replacement = '')
+	{
+		$subject = $this->pattern[$key];
+
+		if (strripos($subject, ')') !== false)
+		{
+			$subject             = rtrim($subject, ')');
+			$subject             = $this->removeQuantifier($subject);
+			$this->pattern[$key] = sprintf('%s%s)', $subject, $replacement);
 		}
-		if ( strripos( $pattern, '?' ) !== false && strripos( $pattern, '\?' ) === false ) {
-			return rtrim( $pattern, '?');
+		else
+		{
+			$subject             = $this->removeQuantifier($subject);
+			$this->pattern[$key] = sprintf('%s%s', $subject, $replacement);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @param $pattern
+	 *
+	 * @return string
+	 */
+	protected function removeQuantifier($pattern)
+	{
+		if (strripos($pattern, '+') !== false && strripos($pattern, '\+') === false)
+		{
+			return rtrim($pattern, '+');
+		}
+		if (strripos($pattern, '*') !== false && strripos($pattern, '\*') === false)
+		{
+			return rtrim($pattern, '*');
+		}
+		if (strripos($pattern, '?') !== false && strripos($pattern, '\?') === false)
+		{
+			return rtrim($pattern, '?');
 		}
 
 		return $pattern;
 	}
 
-	//--------------------------------------------------------------------------------
-
-	public function addModifier( $modifier )
+	/**
+	 * @param $modifier
+	 *
+	 * @return $this
+	 */
+	public function addModifier($modifier)
 	{
-		if ( ! in_array( $modifier, $this->modifiers ) ) {
-			array_push( $this->modifiers, trim($modifier) );
+		if (!in_array($modifier, $this->modifiers))
+		{
+			array_push($this->modifiers, trim($modifier));
 		}
+
 		return $this;
 	}
 
-	public function removeModifier( $modifier )
+	/**
+	 * @param $modifier
+	 *
+	 * @return $this
+	 */
+	public function removeModifier($modifier)
 	{
-		if ( in_array($modifier, $this->modifiers) ) {
-			unset( $this->modifiers[ $modifier] );
+		if (in_array($modifier, $this->modifiers))
+		{
+			unset($this->modifiers[$modifier]);
 		}
+
 		return $this;
 	}
 
-	//--------------------------------------------------------------------------------
-
-	public function addPrefix( $prefix )
+	/**
+	 * @param $prefix
+	 *
+	 * @return $this
+	 */
+	public function addPrefix($prefix)
 	{
-		if ( ! in_array( $prefix, $this->prefixes ) ) {
-			array_push( $this->prefixes, trim($prefix) );
+		if (!in_array($prefix, $this->prefixes))
+		{
+			array_push($this->prefixes, trim($prefix));
 		}
+
 		return $this;
 	}
 
-	public function addSuffix( $suffix )
+	/**
+	 * @param $suffix
+	 *
+	 * @return $this
+	 */
+	public function addSuffix($suffix)
 	{
-		if ( ! in_array( $suffix, $this->suffixes ) ) {
-			array_push( $this->suffixes, trim($suffix) );
+		if (!in_array($suffix, $this->suffixes))
+		{
+			array_push($this->suffixes, trim($suffix));
 		}
+
 		return $this;
 	}
 
@@ -240,104 +366,184 @@ class Flux
 	// @=MODIFIERS
 	//--------------------------------------------------------------------------------
 
-	public function startOfLine() { return $this->addPrefix( '^' ); }
+	public function startOfLine()
+	{
+		return $this->addPrefix('^');
+	}
 
-	public function endOfLine() { return $this->addSuffix( '$' ); }
+	public function endOfLine()
+	{
+		return $this->addSuffix('$');
+	}
 
-	public function ignoreCase() { return $this->addModifier('i'); }
+	public function ignoreCase()
+	{
+		return $this->addModifier('i');
+	}
 
-	// @TODO: Deprecate (0.6.0)
-	public function inAnyCase() { return $this->ignoreCase(); }
+	/**
+	 * @deprecated Deprecated for version 0.6.0
+	 *
+	 * @return Flux
+	 */
+	public function inAnyCase()
+	{
+		return $this->ignoreCase();
+	}
 
-	public function oneLine() { return $this->removeModifier('m'); }
+	public function oneLine()
+	{
+		return $this->removeModifier('m');
+	}
 
-	// @TODO: Deprecate (0.6.0)
-	public function searchOneLine()	{ return $this->oneLine(); }
+	/**
+	 * @deprecated Deprecated for version 0.6.0
+	 *
+	 * @return Flux
+	 */
+	public function searchOneLine()
+	{
+		return $this->oneLine();
+	}
 
-	public function multiline() { return $this->addModifier('m'); }
+	public function multiline()
+	{
+		return $this->addModifier('m');
+	}
 
-	public function matchNewLine() { return $this->addModifier('s'); }
+	public function matchNewLine()
+	{
+		return $this->addModifier('s');
+	}
 
-	// @TODO: dotAll() vs matchNewLine() thoughts?
-	public function dotAll() { return $this->matchNewLine(); }
+	public function dotAll()
+	{
+		return $this->matchNewLine();
+	}
 
 	//--------------------------------------------------------------------------------
 	// @=LANGUAGE
 	//--------------------------------------------------------------------------------
 
-	public function find( $val ) { return $this->then( $val ); }
+	public function find($value)
+	{
+		return $this->then($value);
+	}
 
-	public function then( $val ) { return $this->add( $val ); }
+	public function then($value)
+	{
+		return $this->add($value);
+	}
 
-	public function maybe( $val ) { return $this->add( $val, '(%s)?' ); }
+	public function maybe($value)
+	{
+		return $this->add($value, '(%s)?');
+	}
 
 	public function either()
 	{
-		return $this->raw( implode('|', func_get_args() ), '(%s)' );
+		return $this->raw(implode('|', func_get_args()), '(%s)');
 	}
 
-	public function any( $val ) { return $this->add( $val, '([%s])' ); }
-
-	public function anyOf( $val ) { return $this->any( $val ); }
-
-	public function anything() { return $this->raw( '(.*)' ); }
-
-	public function anythingBut( $val ) { return $this->add( $val, '([^%s]*)' ); }
-
-	public function br() { return $this->raw('(\\n|\\r\\n)'); }
-
-	public function tab() { return $this->raw( '(\\t)' ); }
-
-	public function word() { return $this->raw( '(\\w+)' ); }
-
-	public function lineBreak() { return $this->br(); }
-
-	public function letters( $min=null, $max=null )
+	public function any($value)
 	{
-		if ($min && $max) {
-			return $this->raw( sprintf( '([a-zA-Z]{%d,%d})', $min, $max ) );
-		} elseif ( $min && is_null($max) ) {
-			return $this->raw( sprintf( '([a-zA-Z]{%d})', $min ) );
-		} else {
-			return $this->raw( '([a-zA-Z]+)' );
+		return $this->add($value, '([%s])');
+	}
+
+	public function anyOf($value)
+	{
+		return $this->any($value);
+	}
+
+	public function anything()
+	{
+		return $this->raw('(.*)');
+	}
+
+	public function anythingBut($value)
+	{
+		return $this->add($value, '([^%s]*)');
+	}
+
+	public function br()
+	{
+		return $this->raw('(\\n|\\r\\n)');
+	}
+
+	public function tab()
+	{
+		return $this->raw('(\\t)');
+	}
+
+	public function word()
+	{
+		return $this->raw('(\\w+)');
+	}
+
+	public function lineBreak()
+	{
+		return $this->br();
+	}
+
+	public function letters($min = null, $max = null)
+	{
+		if ($min && $max)
+		{
+			return $this->raw(sprintf('([a-zA-Z]{%d,%d})', $min, $max));
+		}
+		elseif ($min && is_null($max))
+		{
+			return $this->raw(sprintf('([a-zA-Z]{%d})', $min));
+		}
+		else
+		{
+			return $this->raw('([a-zA-Z]+)');
 		}
 	}
 
-	public function digits( $min=null, $max=null )
+	public function digits($min = null, $max = null)
 	{
-		if ($min && $max) {
-			return $this->raw( sprintf( '(\\d{%d,%d})', $min, $max ) );
-		} elseif ( $min && is_null($max) ) {
-			return $this->raw( sprintf( '(\\d{%d})', $min ) );
-		} else {
-			return $this->raw( '(\\d+)' );
+		if ($min && $max)
+		{
+			return $this->raw(sprintf('(\\d{%d,%d})', $min, $max));
+		}
+		elseif ($min && is_null($max))
+		{
+			return $this->raw(sprintf('(\\d{%d})', $min));
+		}
+		else
+		{
+			return $this->raw('(\\d+)');
 		}
 	}
 
-	public function orTry( $val='' )
+	public function orTry($value = '')
 	{
-		if ( empty($val) ) {
-			return $this->addPrefix('(')->addSuffix(')')->raw( ')|(' );
+		if (empty($value))
+		{
+			return $this->addPrefix('(')->addSuffix(')')->raw(')|(');
 		}
 
-		return $this->addPrefix('(')->addSuffix(')')->raw( $val, ')|((%s)' );
+		return $this->addPrefix('(')->addSuffix(')')->raw($value, ')|((%s)');
 	}
 
-	// @TODO: Add some sanity check to the ranges
 	public function range()
 	{
-		$row	= 0;
-		$args	= func_get_args();
-		$ranges	= array();
+		$row    = 0;
+		$args   = func_get_args();
+		$ranges = array();
 
-		foreach ($args as $segment) {
+		foreach ($args as $segment)
+		{
 			$row++;
-			if ($row % 2) {
-				array_push( $ranges, sprintf( '%s-%s', $args[ $row-1 ], $args[ $row ] ) );
+
+			if ($row % 2)
+			{
+				array_push($ranges, sprintf('%s-%s', $args[$row - 1], $args[$row]));
 			}
 		}
 
-		return $this->raw( implode( '', $ranges ), '([%s])' );
+		return $this->raw(implode('', $ranges), '([%s])');
 	}
 
 	//--------------------------------------------------------------------------------
@@ -345,41 +551,47 @@ class Flux
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * @match()
-	 * Tests the pattern to see if it matches $subject
+	 * @param string $subject
+	 * @param string $seed
 	 *
-	 * @return [boolean] Whether the string provided matches the pattern created/provided
+	 * @return int
 	 */
-
-	public function match( $subject, $seed='' )
+	public function match($subject, $seed = '')
 	{
-		if ( !empty($seed) ) { $this->addSeed( $seed ); }
+		if (!empty($seed))
+		{
+			$this->addSeed($seed);
+		}
 
-		return preg_match( $this->compile(), $subject );
+		return preg_match($this->compile(), $subject);
 	}
 
 	/**
-	 * @replace()
-	 * Performs a replacement by using numbered matches starting
+	 * Performs a replacement by using numbered matches
 	 *
-	 * @return [string] The replaced string or a copy of the original
+	 * @param string $replacement
+	 * @param string $subject
+	 * @param string $seed
+	 *
+	 * @return mixed
 	 */
-
-	public function replace( $replacement, $subject, $seed='' )
+	public function replace($replacement, $subject, $seed = '')
 	{
-		if ( !empty($seed) ) { $this->addSeed( $seed ); }
+		if (!empty($seed))
+		{
+			$this->addSeed($seed);
+		}
 
-		return preg_replace( $this->compile(), $replacement, $subject );
+		return preg_replace($this->compile(), $replacement, $subject);
 	}
 
 	/**
-	 * @sanitize( $val )
-	 * Allows us to add values to the pattern in a safe way
+	 * @param $value
 	 *
-	 * @return [mix] The sanitized value
+	 * @return string
 	 */
-	public function sanitize( $val )
+	public function sanitize($value)
 	{
-		return preg_quote( $val, '/' );
+		return preg_quote($value, '/');
 	}
 }
