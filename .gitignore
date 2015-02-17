@@ -1,1 +1,5 @@
-/vendor/
+.tmp
+.temp
+.idea
+.DS_Store
+vendor
