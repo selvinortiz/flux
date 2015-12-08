@@ -181,11 +181,11 @@ class Flux
 	{
 		$lastSegmentKey = $this->getLastSegmentKey();
 
-		if ($min && $max && $min > $max)
+		if (!is_null($min) && !is_null($max) && $max > $min)
 		{
 			$lengthPattern = sprintf('{%d,%d}', (int) $min, (int) $max);
 		}
-		elseif ($min && !$max)
+		elseif (!is_null($min) && !$max)
 		{
 			$lengthPattern = sprintf('{%d}', (int) $min);
 		}
@@ -487,11 +487,11 @@ class Flux
 
 	public function letters($min = null, $max = null)
 	{
-		if ($min && $max)
+		if (!is_null($min) && !is_null($max))
 		{
 			return $this->raw(sprintf('([a-zA-Z]{%d,%d})', $min, $max));
 		}
-		elseif ($min && is_null($max))
+		elseif (!is_null($min) && is_null($max))
 		{
 			return $this->raw(sprintf('([a-zA-Z]{%d})', $min));
 		}
@@ -503,11 +503,11 @@ class Flux
 
 	public function digits($min = null, $max = null)
 	{
-		if ($min && $max)
+		if (!is_null($min) && !is_null($max))
 		{
 			return $this->raw(sprintf('(\\d{%d,%d})', $min, $max));
 		}
-		elseif ($min && is_null($max))
+		elseif (!is_null($min) && is_null($max))
 		{
 			return $this->raw(sprintf('(\\d{%d})', $min));
 		}
