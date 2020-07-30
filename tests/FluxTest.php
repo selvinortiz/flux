@@ -1,12 +1,9 @@
 <?php
 use SelvinOrtiz\Utils\Flux\Flux;
+use PHPUnit\Framework\TestCase;
 
-class FluxTest extends PHPUnit_Framework_TestCase
+class FluxTest extends TestCase
 {
-	public function setUp()	{}
-
-	public function tearDown() {}
-
 	public function inspect($data)
 	{
 		fwrite( STDERR, print_r($data) );

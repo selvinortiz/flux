@@ -26,10 +26,10 @@ class Flux
 	 * The regular expression components that make up the expression
 	 * @var array
 	 */
-	protected $pattern   = array();
-	protected $prefixes  = array();
-	protected $suffixes  = array();
-	protected $modifiers = array();
+	protected $pattern   = [];
+	protected $prefixes  = [];
+	protected $suffixes  = [];
+	protected $modifiers = [];
 
 	/**
 	 * @return Flux
@@ -131,10 +131,10 @@ class Flux
 	public function clear()
 	{
 		$this->seed      = false;
-		$this->pattern   = array();
-		$this->prefixes  = array();
-		$this->suffixes  = array();
-		$this->modifiers = array();
+		$this->pattern   = [];
+		$this->prefixes  = [];
+		$this->suffixes  = [];
+		$this->modifiers = [];
 
 		return $this;
 	}
@@ -531,7 +531,7 @@ class Flux
 	{
 		$row    = 0;
 		$args   = func_get_args();
-		$ranges = array();
+		$ranges = [];
 
 		foreach ($args as $segment)
 		{
